@@ -24,12 +24,23 @@ if ($result->num_rows > 0) {
   }
 }
 
+
 $uid1=$totaluid+1;
 $name=$_POST["username1"];
 $passwd=md5($_POST["password1"]);
 $email=$_POST['email1'];
 $_SESSION["username"]=$name;
 //var_dump($_POST);
+$possible=1;
+$getemail = "SELECT uemail FROM user";
+$resultemail = $conn->query($getemail);
+if ($resultemail->num_rows > 0) {
+    while($row = $result->fetch_assoc()) {
+      if($row["uemail"]==$email)
+      $possible=0;
+  }
+}
+if($possible==1){
 $sql="INSERT INTO `user`(`uid`, `uname`, `uemail`, `upasswd`) VALUES ('$uid1','$name','$email','$passwd')";
 
 if ($conn->query($sql) === TRUE) {
@@ -41,6 +52,17 @@ if ($conn->query($sql) === TRUE) {
 } else {
     echo "Error: " . $sql . "<br>" . $conn->error;
 }
+}
+else{
+  ?>
+<script type="text/javascript">
+
+</script>
+   getElementById('ispossible').innerHtml="Email id already exixt";
+</script>
+
+<?php } ?>
+<?php
 /*
 $name=$_POST["username"];
 $passwd=$_POST["password"];
@@ -140,7 +162,7 @@ body, html {
 <div class="bg-text">
 
     <h1> <span style="color:red">W</span><span style="color:purple">e</span><span style="color:orange">l</span><span style="color:blue">c</span><span style="color:green">o</span><span style="color:indigo">m</span><span style="color:brown">e</span> <?php echo $_POST["username1"] ?></h1>
-    <h4 style="color:#800060"> Your Account is Succesfully Created</h4>
+    <h4  id="ispossible" style="color:#800060"> Your Account is Succesfully Created</h4>
         <p style="color:black;">
         Now You can Sign in
         </p>

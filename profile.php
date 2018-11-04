@@ -2,6 +2,23 @@
 <?php
 session_start();
 ?>
+<?php
+if (!isset($_SESSION['loggedin']) && !$_SESSION['loggedin'] )
+{
+  header("location:index.php");
+
+  ?>
+<script>
+ alert("You Are Not Log In");
+
+</script>
+<?php
+//header("location:index.php");
+
+}
+ ?>
+
+
 
 <html>
 <head>
@@ -41,6 +58,10 @@ body, html {
 }
     a{
         text-decoration: none;
+        font-size: 12px;
+
+        text-align: center;
+
 
     }
 
@@ -69,6 +90,7 @@ body, html {
   position: absolute;
   top: 55%;
   left: 50%;
+  margin-top: 5%;
   transform: translate(-50%, -50%);
   z-index: 2;
   width: 50%;
@@ -76,6 +98,27 @@ body, html {
   text-align: center;
 
 }
+@media screen and (max-width: 700px) {
+.bg-text{
+  width: 100%;
+  margin-top: 0%;
+
+}
+
+
+.profile {
+width: 100%;
+margin-top: 10%;
+
+}
+.profile img{
+  width:30%;
+}
+.profile p{
+   width: 100%;
+   font-size: 16px;
+}
+
 </style>
 </head>
 <body>
@@ -85,16 +128,17 @@ $servername = "localhost";
 $username = "root";
 $password = "";
 $database="RoadSideAssistance";
-
 $conn = new mysqli($servername, $username, $password,$database);
 if ($conn->connect_error) {
     die("Connection failed: " . $conn->connect_error);
 }
 $uname1=$_SESSION['username'];
-$sql = "SELECT uid FROM user where uname='$uname1'";
+$sql = "SELECT uid,uemail FROM user where uname='$uname1'";
 $result = $conn->query($sql);
 $userid = $result->fetch_assoc();
-echo "$userid[0]";
+$uid=$userid["uid"];
+$uemail=$userid["uemail"];
+
  ?>
 
 <div class="bg-image"></div>
@@ -112,6 +156,10 @@ echo "$userid[0]";
   </h3>
   <img style="float:left;" src="image/profile1.png" width="20% height 20%">
   <p style="text-align:left;margin-left:25%;"> name:<?php echo "  ". $_SESSION['username'] ;?> </p>
+  <p style="text-align:left;margin-left:25%;"> User ID:<?php echo "  ".$uid ;?> </p>
+  <p style="text-align:left;margin-left:25%;"> User Email ID:<?php echo "  ".$uemail ;?> </p>
+  <a href="index.php">HOME</a>
+  <br>
 </div>
 </body>
 </html>
